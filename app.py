@@ -2,6 +2,15 @@ from flask import Flask, request, render_template_string, redirect, url_for, ses
 import requests, os
 from functools import wraps
 from flask_talisman import Talisman
+Talisman(
+    app,
+    force_https=True,
+    strict_transport_security=True,
+    strict_transport_security_max_age=31536000,
+    content_security_policy={
+        "default-src": "'self'",
+    },
+)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123") 
@@ -9,14 +18,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123")
 # 🔒 Headers de seguridad
 @app.after_request
 def apply_security_headers(response):
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
-    return response
-
-Talisman(app, content_security_policy=None)
+    ...
 
 # 🔐 Credenciales Zoho
 REFRESH_TOKEN = os.environ.get("1000.040d273c0553c4b984d3a20522f7b294.19f8d5833e8925d1bd2dadc8c42574f4")
@@ -137,6 +139,7 @@ def get_access_token():
 # Start
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
