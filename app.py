@@ -2,6 +2,10 @@ from flask import Flask, request, render_template_string, redirect, url_for, ses
 import requests, os
 from functools import wraps
 from flask_talisman import Talisman
+
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123") 
+
 Talisman(
     app,
     force_https=True,
@@ -11,9 +15,6 @@ Talisman(
         "default-src": "'self'",
     },
 )
-
-app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123") 
 
 # 🔒 Headers de seguridad
 @app.after_request
@@ -139,6 +140,7 @@ def get_access_token():
 # Start
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
