@@ -4,7 +4,18 @@ from functools import wraps
 from flask_talisman import Talisman
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123")
+app.secret_key = os.environ.get("SECRET_KEY", "supersecreto123") 
+
+# 🔒 Headers de seguridad
+@app.after_request
+def apply_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
+    return response
+
 Talisman(app, content_security_policy=None)
 
 # 🔐 Credenciales Zoho
@@ -126,5 +137,6 @@ def get_access_token():
 # Start
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
