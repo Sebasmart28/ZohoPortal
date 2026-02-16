@@ -15,6 +15,9 @@ Talisman(
         "default-src": "'self'",
     },
 )
+@app.route("/debug-GSE")
+def debug():
+    return "SI VES ESTO ES EL ARCHIVO CORRECTO"
 
 # 🔐 Credenciales Zoho
 REFRESH_TOKEN = os.environ.get("1000.040d273c0553c4b984d3a20522f7b294.19f8d5833e8925d1bd2dadc8c42574f4")
@@ -135,6 +138,7 @@ def get_access_token():
 # Start
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
